@@ -24,6 +24,20 @@ class MyApp extends StatelessWidget {
       },
       // home: AuthWidget(),
       initialRoute: '/',
+      // Add error page if we received wrong page address
+      onGenerateRoute: (RouteSettings settings) {
+        return MaterialPageRoute<void>(builder: (context) {
+          return Container(
+            height: 20,
+            child:
+              Center(
+                child: Text('Page no found!',
+                  style: TextStyle(color: Colors.red, fontSize: 20 ),
+                ),
+              ),
+          );
+        });
+      },
       // PonyListPage(),
     );
   }
