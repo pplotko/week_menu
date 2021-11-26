@@ -123,8 +123,8 @@ class _FormWidgetState extends State<_FormWidget> {
 
       final navigator = Navigator.of(context);
       navigator.push(
-        // MaterialPageRoute <void> (builder: (context) => MainScreenWidget()),
-        MaterialPageRoute <void> (builder: (context) => PonyListPage()),
+        MaterialPageRoute <void> (builder: (context) => MainScreenWidget()),
+        // MaterialPageRoute <void> (builder: (context) => PonyListPage()),
       );
       print('open app');
 
