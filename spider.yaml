@@ -16,8 +16,8 @@ use_part_of: true
 package: resources
 
 groups:
-  - path: assets/images
-    class_name: Images
+  - path: assets/recipes_images
+    class_name: AppImages
     types: [ .png, .jpg, .jpeg, .webp, .webm, .bmp ]
 #  - path: assets/vectors
 #    class_name: Svgs
