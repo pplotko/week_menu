@@ -14,13 +14,13 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   // Widget bl = buildList();
-  List<Widget> _widgetOptions = <Widget>[
-    DaysListWidget(),
-    RecipeListWidget(),
-    Text('Index 2: Настройки',
-      style: optionStyle,
-    ),
-  ];
+  // List<Widget> _widgetOptions = <Widget>[
+  //   DaysListWidget(),
+  //   RecipeListWidget(),
+  //   Text('Index 2: Настройки',
+  //     style: optionStyle,
+  //   ),
+  // ];
 
   void _onItemTapped(int index) {
     if (_selectedIndex == index) return;
@@ -36,10 +36,20 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         centerTitle: true,
         title: Text('WeekMenu'),
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          DaysListWidget(),
+          RecipeListWidget(),
+          Text('Index 2: Настройки',
+            style: optionStyle,
+          ),
+        ],
       ),
-        bottomNavigationBar: BottomNavigationBar(
+      // body: Center(
+      //   child: _widgetOptions.elementAt(_selectedIndex),
+      // ),
+      bottomNavigationBar: BottomNavigationBar(
 
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
