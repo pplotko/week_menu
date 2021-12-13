@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:json_placeholder_app/resources/resources.dart';
+import 'package:json_placeholder_app/widgets/recipe_detail_screen/recipe_detail_widget.dart';
 
 class Recipe {
   final int id;
@@ -22,7 +23,7 @@ class Recipe {
 // final указывает на то, что мы больше
 // никогда не сможем присвоить имени _recipe
 // другой список рецептов
-final _recipes = [
+final recipes = [
   Recipe(
     id: 0,
     imageName: AppImages.kotletiKlassicheskie2480300x233,
@@ -86,11 +87,11 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
   void _searchRecipes() {
     final query = _searchController.text.toLowerCase();
     if (query.isNotEmpty) {
-      _filteredRecipes = _recipes.where((Recipe recipe) {
+      _filteredRecipes = recipes.where((Recipe recipe) {
         return recipe.title.toLowerCase().contains(query.toLowerCase());
       }).toList();
     }else {
-      _filteredRecipes = _recipes;
+      _filteredRecipes = recipes;
     }
     setState(() {});
     }
@@ -100,7 +101,7 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
     // TODO: implement initState
     super.initState();
 
-    _filteredRecipes = _recipes;
+    _filteredRecipes = recipes;
     _searchController.addListener(_searchRecipes);
   }
 
@@ -173,6 +174,10 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
                             borderRadius: BorderRadius.circular(10),
                             onTap: () {
                               print('Click');
+                              print(recipe.id.toString());
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => RecipeDetailPage(recipe.id)
+                              ));
                             },
                           ),
                         ),
