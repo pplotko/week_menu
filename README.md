@@ -1,4 +1,4 @@
-# json_placeholder_app
+# week_menu_planner_app
 
 A new Flutter project.
 
