@@ -27,11 +27,19 @@ Widget buildDayCard(Day day) {
   return Card(
     elevation: 6.0,
     color: AppColors.mainLightBlue,
-    shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(10.0)),
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0)
+        )
+    ),
     child: Padding( padding: const EdgeInsets.all(16.0),
       child: Column( children: <Widget>[ /*Text(day.id.toString()),
           const SizedBox( height: 14.0, ),*/
-        Text( day.label, style: const TextStyle( fontSize: 20.0, fontWeight: FontWeight.w700, fontFamily: 'Palatino', ), )
+        Text( day.label,
+          style: const TextStyle( fontSize: 20.0, fontWeight: FontWeight.w700,
+            fontFamily: 'Palatino', ),
+        )
       ], ), ),
   );
 }

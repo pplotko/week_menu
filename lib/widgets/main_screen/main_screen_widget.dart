@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:json_placeholder_app/widgets/days_list/days_list_widget.dart';
 import 'package:json_placeholder_app/widgets/recipe_list/recipe_list_widget.dart';
+import 'package:json_placeholder_app/widgets/settings_widget/settings_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
@@ -41,9 +42,10 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         children: [
           DaysListWidget(),
           RecipeListWidget(),
-          Text('Index 2: Настройки',
-            style: optionStyle,
-          ),
+          SettingsWidget(),
+          // Text('Index 2: Настройки',
+          //   style: optionStyle,
+          // ),
         ],
       ),
       // body: Center(
