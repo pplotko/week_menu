@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:json_placeholder_app/domain/api_clients/api_client.dart';
 
 
 
@@ -40,6 +41,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+    ApiClient().getPosts();
 
     return Scaffold(
       body: Column(

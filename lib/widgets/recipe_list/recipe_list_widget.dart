@@ -127,7 +127,7 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
           itemBuilder: (BuildContext context, int index) {
             final recipe = _filteredRecipes[index];
             return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                   child: Stack(
                     children: [DecoratedBox(
                       decoration: BoxDecoration(
@@ -198,7 +198,13 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
 
         // Search field
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding:
+            const EdgeInsets.only(
+                left : 14.0,
+                top : 16.0,
+                right : 14.0,
+                bottom : 8),
+          // const EdgeInsets.all(8.0),
           child: TextField(
             controller: _searchController,
             decoration: InputDecoration(
@@ -206,6 +212,11 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
               fillColor: Colors.white.withAlpha(235),
               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
               labelText: 'Поиск',
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(  //You can also use EdgeInsets.only
+                horizontal: 12.0, //Change this
+                vertical: 12.0,
+              ),//Change this
             ),
           ),
         ),
