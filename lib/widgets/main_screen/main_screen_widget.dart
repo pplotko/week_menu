@@ -30,12 +30,38 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
     });
   }
 
+  dataTimeToday () {
+    String dataDayNow = "0";
+    String dataMonthNow = "0";
+
+    dataDayNow = DateTime.now().day.toInt()<10? '0' + DateTime.now().day.toString()
+        : dataDayNow = DateTime.now().day.toString(); // Это если через тернарный оператор писать
+    dataMonthNow = DateTime.now().month.toInt()<10? '0' + DateTime.now().month.toString()
+        : dataDayNow = DateTime.now().month.toString();
+    // if (DateTime.now().day.toInt()<10) {
+    //   dataDayNow = '0' + DateTime.now().day.toString();
+    // }
+    // else {
+    //   dataDayNow = DateTime.now().day.toString();
+    // }
+    // if (DateTime.now().month.toInt()<10) {
+    //   dataMonthNow = '0' + DateTime.now().month.toString();
+    // }
+    // else {
+    //   dataMonthNow = DateTime.now().month.toString();
+    // }
+    final String dateNow = dataDayNow +'.' + dataMonthNow + '.' + DateTime.now().year.toString();
+
+    return(dateNow);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String dataToday = dataTimeToday();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('WeekMenu'),
+        title: Text('WeekMenu     Today: $dataToday'),
       ),
       body: IndexedStack(
         index: _selectedIndex,
