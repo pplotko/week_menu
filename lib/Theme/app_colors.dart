@@ -9,5 +9,5 @@ abstract class AppColors{
   static const unselectedGrey = Color(0xFFC4C4C4);
   static const selectedColor = Color(0xFFE2ECAA);
   static const foregroundLightGreen = Color(0xFFE7F4DE);
-
+  static const foregroundDarkText = Color(0xFF263238);
 }

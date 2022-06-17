@@ -5,16 +5,20 @@ import '../recipe_list/recipe_list_widget.dart';
 import '../settings_widget/settings_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
-  const MainScreenWidget({Key? key}) : super(key: key);
+
+  List<Recipe> recipes;
+
+  MainScreenWidget({Key? key, required this.recipes,}) : super(key: key);
 
   @override
-  _MainScreenWidgetState createState() => _MainScreenWidgetState();
+  _MainScreenWidgetState createState() => _MainScreenWidgetState(this.recipes);
 }
 
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   int _selectedIndex = 0;
+  List<Recipe> recipes;
 
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Raleway',);
+  _MainScreenWidgetState(this.recipes);
 
   void _onItemTapped(int index) {
     if (_selectedIndex == index) return;
@@ -48,10 +52,10 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         child: IndexedStack(
           index: _selectedIndex,
           // sizing: StackFit.expand,
-          children: const [
-            DaysListWidget(),
-            RecipeListWidget(),
-            SettingsWidget(),
+          children:  [
+            DaysListWidget(recipes:recipes,),
+            RecipeListWidget(recipes:recipes,),
+            const SettingsWidget(),
           ],
         ),
       ),
