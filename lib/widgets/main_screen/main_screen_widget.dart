@@ -1,31 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/main_tabs_provider.dart';
 import '../days_list/days_list_widget.dart';
 import '../recipe_list/recipe_list_widget.dart';
 import '../settings_widget/settings_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
-
+  // GlobalKey<MainScreenWidgetState> myNavigationKey = GlobalKey();
   List<Recipe> recipes;
 
-  MainScreenWidget({Key? key, required this.recipes,}) : super(key: key);
+  MainScreenWidget({Key? key, required this.recipes}) : super(key: key);
 
   @override
-  _MainScreenWidgetState createState() => _MainScreenWidgetState(this.recipes);
+  MainScreenWidgetState createState() => MainScreenWidgetState(this.recipes);
 }
 
-class _MainScreenWidgetState extends State<MainScreenWidget> {
-  int _selectedIndex = 0;
+class MainScreenWidgetState extends State<MainScreenWidget> {
+  // int _selectedIndex = 0;
   List<Recipe> recipes;
-
-  _MainScreenWidgetState(this.recipes);
-
-  void _onItemTapped(int index) {
-    if (_selectedIndex == index) return;
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  MainScreenWidgetState(this.recipes);
 
   dataTimeToday () {
     String dataDayNow = "0";
@@ -41,45 +36,56 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   Widget build(BuildContext context) {
     final String dataToday = dataTimeToday();
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('WeekMenu     Today: $dataToday'),
-      ),
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: IndexedStack(
-          index: _selectedIndex,
-          // sizing: StackFit.expand,
-          children:  [
-            DaysListWidget(recipes:recipes,),
-            RecipeListWidget(recipes:recipes,),
-            const SettingsWidget(),
-          ],
-        ),
-      ),
+    return ChangeNotifierProvider(
+        create: (context) => MainTabsProvider(),
+        child: Builder (builder: (context) {
+          final selectedIndex = context.watch<MainTabsProvider>().currentTableIndex;
+          final mainTabsProvider = context.watch<MainTabsProvider>();
+          return
+      // child:
+            Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text('WeekMenu     Today: $dataToday'),
+              ),
+              body:
+                  SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: IndexedStack(
+                      index: selectedIndex,
+                      // sizing: StackFit.expand,
+                      children:  [
+                        DaysListWidget(recipes:recipes,),
+                        RecipeListWidget(recipes:recipes,),
+                        const SettingsWidget(),
+                    ],
+                  ),
+                ),
+                  bottomNavigationBar: BottomNavigationBar(
 
-      bottomNavigationBar: BottomNavigationBar(
-
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Недельное меню',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Рецепты',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Настройки',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-
-        onTap: _onItemTapped,
-      ),
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.calendar_today),
+                        label: 'Недельное меню',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.menu),
+                        label: 'Рецепты',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.settings),
+                        label: 'Настройки',
+                      ),
+                    ],
+                    currentIndex: selectedIndex,
+                    onTap: (int index) {print('Index = $index');
+                      // mainTabsProvider.onItemTapped(index);
+                      mainTabsProvider.onItemTapped(index);
+                  },
+                ),
+            );
+        })
     );
   }
 }

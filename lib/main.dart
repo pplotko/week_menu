@@ -1,7 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:week_menu/presentation/bloc/week_recipes/week_recipes_bloc.dart';
+import 'package:week_menu/provider/main_tabs_provider.dart';
 import 'package:week_menu/resources/resources.dart';
 import 'package:week_menu/widgets/recipe_list/recipe_list_widget.dart';
 import 'Theme/app_colors.dart';
@@ -9,6 +10,9 @@ import 'app_bloc_observer.dart';
 import 'presentation/bloc/week_recipes/week_recipes_state.dart';
 import 'widgets/auth/auth_widget.dart';
 import 'widgets/main_screen/main_screen_widget.dart';
+
+// GlobalKey<MainScreenWidgetState> _myNavigationKey = GlobalKey();
+UniqueKey _myNavigationKey = UniqueKey();
 
 void main() {
   BlocOverrides.runZoned(
@@ -33,6 +37,9 @@ class WeekRecipes {
 }
 
 class MyApp extends StatelessWidget {
+  // GlobalKey<MainScreenWidgetState> _myNavigationKey;
+
+
   MyApp({Key? key}) : super(key: key);
   final recipes = [
     Recipe(
@@ -85,67 +92,86 @@ class MyApp extends StatelessWidget {
     ),
   ];
 
-
   @override
   Widget build(BuildContext context) {
-    var recepts1 = <Recipe> [];
+    var recepts1, recepts2, recepts3 = <Recipe> [];
     Recipe recept1;
+    Recipe recept2;
+    Recipe recept3;
     recepts1 = recipes.where((element) =>  [0].contains(element.id)).toList();
     recept1 = recepts1[0];
-    List<Recipe> listRecipies1 = [recept1, recept1];
+    recepts2 = recipes.where((element) =>  [1].contains(element.id)).toList();
+    recept2 = recepts2[0];
+    recepts3 = recipes.where((element) =>  [2].contains(element.id)).toList();
+    recept3 = recepts3[0];
+    List<Recipe> listRecipies1 = [recept1, recept2];
+    List<Recipe> listRecipies2 = [recept2];
+    List<Recipe> listRecipies3 = [recept3];
     // Recipe recept1 = recipes.where((Recipe recipe) {
     //   return recipe.id.contains('0');
     // }) as Recipe;
     // 'Завтрак' : [recipes.where((element) => [1].contains(element.id)),],
     print('$recepts1');
-    DayRecipes firstDay;
-    firstDay = DayRecipes(dayRecipes:{
-      'Завтрак' : listRecipies1,
+    DayRecipes firstDay, secondDay, nullDay ;
+    // DayRecipes secondDay;
+    nullDay = DayRecipes(dayRecipes:{
+      'Завтрак' : [],
       'Обед' : listRecipies1,
       'Ужин' : listRecipies1,
     }) ;
+    firstDay = DayRecipes(dayRecipes:{
+      'Завтрак' : listRecipies1,
+      'Обед' : listRecipies2,
+      'Ужин' : listRecipies3,
+    }) ;
+    secondDay = DayRecipes(dayRecipes:{
+      'Завтрак' : listRecipies2,
+      'Обед' : listRecipies2,
+      'Ужин' : listRecipies3,
+    }) ;
 
-    List<DayRecipes> weekRecipesList = [firstDay, firstDay];
+    List<DayRecipes> weekRecipesList = [nullDay, firstDay, secondDay, firstDay, firstDay, firstDay, firstDay,];
     WeekRecipes weekRecipes = WeekRecipes(weekRecipes: weekRecipesList);
-    return BlocProvider(
-      create: (BuildContext context) => WeekRecipesBloc(weekRecipes),
-      child: MaterialApp(
-        title: 'WeekMenu',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(
+    return
+        BlocProvider(
+        create: (BuildContext context) => WeekRecipesBloc(weekRecipes),
+        child: MaterialApp(
+          title: 'WeekMenu',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            appBarTheme: const AppBarTheme(
               backgroundColor: AppColors.mainGreenDark,
+            ),
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              backgroundColor: AppColors.mainGreenDark,
+              selectedItemColor: AppColors.selectedColor,
+              unselectedItemColor: AppColors.unselectedGrey,
+            ),
+            primarySwatch: Colors.green,
+            fontFamily: 'Raleway',
           ),
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: AppColors.mainGreenDark,
-            selectedItemColor: AppColors.selectedColor,
-            unselectedItemColor: AppColors.unselectedGrey,
-          ),
-          primarySwatch: Colors.green,
-          fontFamily: 'Raleway',
-        ),
 
-        routes: {
-          '/': (context) => const AuthWidget(),
-          '/main': (context) => MainScreenWidget(recipes: recipes),
-        },
-        initialRoute: '/',
-        // Add error page if we received wrong page address
-        onGenerateRoute: (RouteSettings settings) {
-          return MaterialPageRoute<void>(builder: (context) {
-            return const SizedBox(
-              height: 20,
-              child:
+          routes: {
+            '/': (context) => const AuthWidget(),
+            '/main': (context) => MainScreenWidget(key: _myNavigationKey, recipes: recipes),
+          },
+          initialRoute: '/',
+          // Add error page if we received wrong page address
+          onGenerateRoute: (RouteSettings settings) {
+            return MaterialPageRoute<void>(builder: (context) {
+              return const SizedBox(
+                height: 20,
+                child:
                 Center(
                   child: Text('Page no found!',
                     style: TextStyle(color: Colors.red, fontSize: 20 ),
                   ),
                 ),
-            );
-          });
-        },
-      ),
-    );
+              );
+            });
+          },
+        ),
+      );
   }
 }
 

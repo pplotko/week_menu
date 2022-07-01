@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../Theme/app_colors.dart';
+import '../../presentation/bloc/week_recipes/week_recipes_bloc.dart';
+import '../../presentation/bloc/week_recipes/week_recipes_event.dart';
 import '../recipe_detail_screen/recipe_detail_widget.dart';
 
 class Recipe {
@@ -116,6 +119,7 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final weekRecipesBloc = BlocProvider.of<WeekRecipesBloc>(context);
     return Stack(
       children: [
         ListView.builder(
@@ -202,6 +206,7 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
                         // padding: const EdgeInsets.all(2.0),
                         onPressed: () {
                           print("Pressed IconButton");
+                          weekRecipesBloc.add(WeekRecipesAddRecipeEvent());
                         }
                     ),
                   ),

@@ -119,6 +119,7 @@ class _FormWidgetState extends State<_FormWidget> {
 
       final navigator = Navigator.of(context);
       navigator.pushReplacementNamed('/main');
+      // Navigator.pushNamed(context, '/main');
       // print('open app');
     }
     else {
