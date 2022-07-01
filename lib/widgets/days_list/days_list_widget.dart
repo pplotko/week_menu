@@ -215,7 +215,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
 
                                       return
                                         Padding(
-                                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
+                                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                                           child: Container(
                                             // height: 48,
                                             width: MediaQuery.of(context).size.width-72,
@@ -255,6 +255,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                                         child:
                                                           mealTimeMenuWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies!, dayController:dayController),
                                                       ),
+                                                      // const SizedBox(height: 8,),
                                                     ],
                                                   ),
                                                   imageChoiceWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies, recipies: recipes,),
@@ -326,14 +327,15 @@ class _mealTimeMenuWidgetState extends State<mealTimeMenuWidget> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              alignment: Alignment.centerLeft,
+              padding: MaterialStateProperty.all(const EdgeInsets.only(left: 0)),
+              // alignment: Alignment.topLeft,
             ),
             onPressed: () {},
             child:
             Text(mealTimeRecipiesList[i].title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.left,
             ),
           ),
         );
@@ -406,7 +408,7 @@ class _imageChoiceWidgetState extends State<imageChoiceWidget> {
                     const TextStyle(fontSize: 20,
                       fontWeight: FontWeight.w500, /*letterSpacing: -0.6,*/),
                   ),
-                  padding: MaterialStateProperty.all(EdgeInsets.only(left: 2)),
+                  // padding: MaterialStateProperty.all(EdgeInsets.only(left: 2)),
                   alignment: Alignment.center,
                 ),
                 onPressed: (){
