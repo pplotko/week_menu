@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_menu/resources/resources.dart';
-import 'package:week_menu/widgets/recipe_list/recipe_list_widget.dart';
+import 'package:week_menu/widgets/recipes_list/recipes_list_widget.dart';
 
 import '../../Theme/app_colors.dart';
 import '../../main.dart';

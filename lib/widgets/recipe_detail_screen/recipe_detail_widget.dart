@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:week_menu/Theme/app_colors.dart';
-import '../recipe_list/recipe_list_widget.dart';
+import '../recipes_list/recipes_list_widget.dart';
 
 
 class RecipeDetailPage extends StatelessWidget {

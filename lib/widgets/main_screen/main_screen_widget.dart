@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../provider/main_tabs_provider.dart';
 import '../days_list/days_list_widget.dart';
-import '../recipe_list/recipe_list_widget.dart';
+import '../recipes_list/recipes_list_widget.dart';
 import '../settings_widget/settings_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
@@ -36,13 +36,15 @@ class MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   Widget build(BuildContext context) {
     final String dataToday = dataTimeToday();
-    return ChangeNotifierProvider(
-        create: (context) => MainTabsProvider(),
-        child: Builder (builder: (context) {
+    return
+      // ChangeNotifierProvider(
+      //   // create: (context) => MainTabsProvider(),
+      //   // child:
+        Builder (builder: (context) {
           final selectedIndex = context.watch<MainTabsProvider>().currentTableIndex;
           final mainTabsProvider = context.watch<MainTabsProvider>();
+          print("mainTabsProvider = $mainTabsProvider");
           return
-      // child:
             Scaffold(
               appBar: AppBar(
                 centerTitle: true,
@@ -57,7 +59,7 @@ class MainScreenWidgetState extends State<MainScreenWidget> {
                       // sizing: StackFit.expand,
                       children:  [
                         DaysListWidget(recipes:recipes,),
-                        RecipeListWidget(recipes:recipes,),
+                        RecipesListWidget(recipes:recipes,),
                         const SettingsWidget(),
                     ],
                   ),
@@ -80,12 +82,11 @@ class MainScreenWidgetState extends State<MainScreenWidget> {
                     ],
                     currentIndex: selectedIndex,
                     onTap: (int index) {print('Index = $index');
-                      // mainTabsProvider.onItemTapped(index);
                       mainTabsProvider.onItemTapped(index);
                   },
                 ),
             );
-        })
-    );
+        });
+    // );
   }
 }

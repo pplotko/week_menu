@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:week_menu/provider/main_tabs_provider.dart';
 
 import '../../Theme/app_colors.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_bloc.dart';
@@ -22,6 +23,12 @@ class Recipe {
     required this.description,
     required this.imgFirstName,
   });
+  @override
+  String toString() {
+    // TODO: implement toString
+    // String recipeDescription = "$title";
+    return title;
+  }
 }
 // создаем список рецептов
 // final указывает на то, что мы больше
@@ -79,21 +86,21 @@ class Recipe {
 // ];
 
 
-class RecipeListWidget extends StatefulWidget {
+class RecipesListWidget extends StatefulWidget {
   List<Recipe> recipes;
-  RecipeListWidget({Key? key, required this.recipes}) : super(key: key);
+  RecipesListWidget({Key? key, required this.recipes}) : super(key: key);
 
   @override
-  State<RecipeListWidget> createState() => _RecipeListWidgetState(this.recipes);
+  State<RecipesListWidget> createState() => _RecipesListWidgetState(this.recipes);
 }
 
-class _RecipeListWidgetState extends State<RecipeListWidget> {
+class _RecipesListWidgetState extends State<RecipesListWidget> {
 
   var _filteredRecipes = <Recipe> [];
   final _searchController = TextEditingController();
   List<Recipe> recipes;
 
-  _RecipeListWidgetState(this.recipes);
+  _RecipesListWidgetState(this.recipes);
 
   void _searchRecipes() {
     final query = _searchController.text.toLowerCase();
@@ -119,6 +126,9 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final mainTabsProvider = context.watch<MainTabsProvider>();
+    print("MainTabsProvider.currentDayIndex = ${mainTabsProvider.currentDayIndex}");
+    print("MainTabsProvider.currentMeelIndex = ${mainTabsProvider.currentMeelIndex}");
     final weekRecipesBloc = BlocProvider.of<WeekRecipesBloc>(context);
     return Stack(
       children: [
@@ -200,13 +210,15 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
                   ),
                   Align(
                     alignment: Alignment.topRight,
-                    child: IconButton(
+                    child: IconButton(                  // AddRecipe
                         icon: const Icon(Icons.add),
                         color:AppColors.mainGreenMoreDark,
                         // padding: const EdgeInsets.all(2.0),
                         onPressed: () {
                           print("Pressed IconButton");
-                          weekRecipesBloc.add(WeekRecipesAddRecipeEvent());
+                          mainTabsProvider.currentRecipe = recipe;
+                          weekRecipesBloc.add(WeekRecipesAddRecipeEvent());               //!!!!!!!!!!!!!!!!!!!!!!!!!!
+                          Navigator.of(context).pushReplacementNamed('/main');
                         }
                     ),
                   ),

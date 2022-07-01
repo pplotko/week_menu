@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_menu/resources/resources.dart';
-import 'package:week_menu/widgets/recipe_list/recipe_list_widget.dart';
+import 'package:week_menu/widgets/recipes_list/recipes_list_widget.dart';
 
 import '../../Theme/app_colors.dart';
 import '../../main.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_bloc.dart';
+import '../../presentation/bloc/week_recipes/week_recipes_event.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_state.dart';
 import '../../provider/main_tabs_provider.dart';
-import '../main_screen/main_screen_widget.dart';
-import '../main_screen/main_screen_widget.dart';
 import '../main_screen/main_screen_widget.dart';
 import 'week_days.dart';
 // GlobalKey<MainScreenWidgetState> _myNavigationKey = GlobalKey();
@@ -26,9 +25,9 @@ class DaysListWidget extends StatefulWidget {
 class _DaysListWidgetState extends State<DaysListWidget> {
 
   var dayListState = List.filled(7, 0);
-  List<String> DaysNames= ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-  List<String> MealTime= ['Завтрак', 'Обед', 'Ужин', 'Добавить приём пищи'];
-  int dayController=0;
+  List<String> daysNames= ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+  List<String> mealTime= ['Завтрак', 'Обед', 'Ужин', 'Добавить приём пищи'];
+  // int dayController=0;
   List<Recipe> recipes;
   _DaysListWidgetState(this.recipes);
 
@@ -44,6 +43,8 @@ class _DaysListWidgetState extends State<DaysListWidget> {
     return
       BlocBuilder <WeekRecipesBloc, WeekRecipesState>(
         builder: (BuildContext context, state) {
+          final currentDayIndex = context.watch<MainTabsProvider>().currentDayIndex;
+          final currentMeelIndex = context.watch<MainTabsProvider>().currentMeelIndex;
           if (state is WeekRecipesLoadingState) {
             return const Center(child: CircularProgressIndicator(),);
            }
@@ -71,7 +72,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                             itemCount: 7,
                             // itemExtent: 7,
                             itemBuilder: (BuildContext context, int index) {
-                              if (dayController == index) {
+                              if (currentDayIndex == index) {
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 8),
                                   child: Container(
@@ -97,7 +98,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                           borderRadius: BorderRadius.all(Radius.circular(24),),
                                           color: AppColors.mainLightGreen,
                                         ),
-                                        child: Text(DaysNames[index],
+                                        child: Text(daysNames[index],
                                           style: const TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w800,
@@ -125,13 +126,14 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                             const TextStyle(fontSize: 20,
                                               fontWeight: FontWeight.w500, /*letterSpacing: -0.6,*/),
                                           ),
-                                          padding: MaterialStateProperty.all(EdgeInsets.only(left: 2)),
+                                          padding: MaterialStateProperty.all(const EdgeInsets.only(left: 2)),
                                           alignment: Alignment.center,
                                         ),
                                         onPressed: () => setState(() {
-                                          dayController = index;
+                                          // dayController = index;
+                                          context.read<MainTabsProvider>().currentDayIndex = index;
                                         }),
-                                        child: Text(DaysNames[index],
+                                        child: Text(daysNames[index],
                                           /*textAlign: TextAlign.center,*/),
                                       ),
                                     ),
@@ -164,7 +166,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                               width: MediaQuery.of(context).size.width-88,
                               child: ListView.builder(
                                   itemCount:                    //Тут задаю цикл по количеству приёмов пищи в этот день
-                                    state.weekRecipes.weekRecipes[dayController].dayRecipes.length+1,
+                                    state.weekRecipes.weekRecipes[currentDayIndex].dayRecipes.length+1,
                                   itemBuilder: (BuildContext context, int index) {
                                     // for(var item in state.weekRecipes.weekRecipes[dayController].dayRecipes.entries){
                                     //   // item представляет MapEntry<K, V>
@@ -172,7 +174,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                     // }
 
                                     if (index ==
-                                        state.weekRecipes.weekRecipes[dayController].dayRecipes.length
+                                        state.weekRecipes.weekRecipes[currentDayIndex].dayRecipes.length
                                       ) // Показать кнопку 'Добавить приём пищи'
                                     {
                                       return Padding(
@@ -193,7 +195,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                                 ),
                                               ),
                                               onPressed: () {},
-                                              child: Text(MealTime[index],
+                                              child: Text(mealTime[index],
                                                 textAlign: TextAlign.center,),
                                             ),
                                           ),
@@ -201,11 +203,12 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                       // }
                                     } else { // Показать карточки: завтрак, обед...
 
-                                      DayRecipes dayRecipes = state.weekRecipes.weekRecipes[dayController];
-                                      print('state.weekRecipes.weekRecipes[$dayController].= ${state.weekRecipes.weekRecipes[dayController]}');
-                                      print('dayControllerFirst= $dayController');
+                                      DayRecipes dayRecipes = state.weekRecipes.weekRecipes[currentDayIndex];
+                                      print('state.weekRecipes.weekRecipes[$currentDayIndex].= ${state.weekRecipes.weekRecipes[currentDayIndex]}');
+                                      print('dayControllerFirst = currentDayIndex = $currentDayIndex');
 
-                                      List<Recipe>? listRecipies = dayRecipes.dayRecipes[MealTime[index]];
+                                      List<Recipe>? listRecipies = dayRecipes.dayRecipes[mealTime[index]];
+                                      print('listRecipies = ${listRecipies.toString()}');
                                       String imageNameInList;
                                       if (listRecipies == null || listRecipies.isEmpty ) {
                                         imageNameInList = AppImages.kotletiKlassicheskie2480300x233;
@@ -215,7 +218,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
 
                                       return
                                         Padding(
-                                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
+                                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                                           child: Container(
                                             // height: 48,
                                             width: MediaQuery.of(context).size.width-72,
@@ -239,7 +242,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                                     mainAxisAlignment: MainAxisAlignment.start,
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text(MealTime[index],
+                                                      Text(mealTime[index],
                                                         style: const TextStyle(
                                                             fontSize: 16,
                                                             fontWeight:
@@ -253,11 +256,11 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                                       SizedBox(
                                                         width: MediaQuery.of(context).size.width - 248,
                                                         child:
-                                                          mealTimeMenuWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies!, dayController:dayController),
+                                                          MealTimeMenuWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies!, dayController:currentDayIndex),
                                                       ),
                                                     ],
                                                   ),
-                                                  imageChoiceWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies, recipies: recipes,),
+                                                  imageChoiceWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies, recipies: recipes, meelTime: mealTime[index]),
                                                 ],
                                               ),
                                             ),
@@ -293,22 +296,24 @@ class _DaysListWidgetState extends State<DaysListWidget> {
 
 
 
-class mealTimeMenuWidget extends StatefulWidget {
-  List<Recipe> mealTimeRecipiesList;
-  int dayController;
-  mealTimeMenuWidget({Key? key, required this.mealTimeRecipiesList, required this.dayController}) : super(key: key);
+class MealTimeMenuWidget extends StatefulWidget {
+  final List<Recipe> mealTimeRecipiesList;
+  final int dayController;
+  const MealTimeMenuWidget({Key? key, required this.mealTimeRecipiesList, required this.dayController}) : super(key: key);
 
   @override
-  State<mealTimeMenuWidget> createState() => _mealTimeMenuWidgetState(this.mealTimeRecipiesList, this.dayController);
+  State<MealTimeMenuWidget> createState() => _MealTimeMenuWidgetState(this.mealTimeRecipiesList, this.dayController);
 }
 
-class _mealTimeMenuWidgetState extends State<mealTimeMenuWidget> {
+class _MealTimeMenuWidgetState extends State<MealTimeMenuWidget> {
   List<Recipe> mealTimeRecipiesList;
   int dayController;
-  _mealTimeMenuWidgetState(this.mealTimeRecipiesList, this.dayController);
+  _MealTimeMenuWidgetState(this.mealTimeRecipiesList, this.dayController);
 
   @override
   Widget build(BuildContext context) {
+    final mainTabsProvider = context.watch<MainTabsProvider>();
+    final weekRecipesBloc = BlocProvider.of<WeekRecipesBloc>(context);
     print('dayController= $dayController');
     List<Widget> myListWidgets=[];
     if (mealTimeRecipiesList.length != null || mealTimeRecipiesList.isNotEmpty) {
@@ -326,24 +331,32 @@ class _mealTimeMenuWidgetState extends State<mealTimeMenuWidget> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              alignment: Alignment.centerLeft,
+              padding: MaterialStateProperty.all(
+                  const EdgeInsets.only(left: 0)),
+              // alignment: Alignment.topLeft,
             ),
             onPressed: () {},
+            onLongPress: () {                     ///DelRecipe
+              print("Pressed TextButton");
+              mainTabsProvider.currentListIndex = i;
+              weekRecipesBloc.add(WeekRecipesDelRecipeEvent());
+              Navigator.of(context).pushReplacementNamed('/main');
+            },
             child:
             Text(mealTimeRecipiesList[i].title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.left,
             ),
           ),
         );
-        return
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: myListWidgets,
-          );
       }
+      return
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: myListWidgets,
+        );
     }
     if (mealTimeRecipiesList.isEmpty) {
       return
@@ -361,38 +374,40 @@ class _mealTimeMenuWidgetState extends State<mealTimeMenuWidget> {
   }
 }
 
+
+
 class imageChoiceWidget extends StatefulWidget {
   List<Recipe> mealTimeRecipiesList;
   List<Recipe> recipies;
+  String meelTime;
 
-
-  imageChoiceWidget({Key? key, required this.mealTimeRecipiesList , required this.recipies}) : super(key: key);
+  imageChoiceWidget({Key? key, required this.mealTimeRecipiesList , required this.recipies, required String this.meelTime}) : super(key: key);
 
   @override
-  State<imageChoiceWidget> createState() => _imageChoiceWidgetState(this.mealTimeRecipiesList, this.recipies);
+  State<imageChoiceWidget> createState() => _imageChoiceWidgetState(this.mealTimeRecipiesList, this.recipies, this.meelTime);
 }
 
 class _imageChoiceWidgetState extends State<imageChoiceWidget> {
   List<Recipe> mealTimeRecipiesList;
   List<Recipe> recipies;
-  _imageChoiceWidgetState(this.mealTimeRecipiesList, this.recipies);
-  // final _mainTabsProvider = MainTabsProvider();
+  String meelTime;
+  _imageChoiceWidgetState(this.mealTimeRecipiesList, this.recipies, this.meelTime);
   // GlobalKey<MainScreenWidgetState> myNavigationKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    final mainTabsProvider = context.watch<MainTabsProvider>();
+    // final mainTabsProvider = context.read<MainTabsProvider>();
     if (mealTimeRecipiesList.isEmpty) {
       return
         Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
             child: SizedBox(
               height: 96,
               width: 96,
               child:
-              ElevatedButton(
+              ElevatedButton(                                                   //Button to add recipes
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
                       AppColors.foregroundLightGreen),
@@ -406,12 +421,14 @@ class _imageChoiceWidgetState extends State<imageChoiceWidget> {
                     const TextStyle(fontSize: 20,
                       fontWeight: FontWeight.w500, /*letterSpacing: -0.6,*/),
                   ),
-                  padding: MaterialStateProperty.all(EdgeInsets.only(left: 2)),
+                  // padding: MaterialStateProperty.all(EdgeInsets.only(left: 2)),
                   alignment: Alignment.center,
                 ),
                 onPressed: (){
-                  mainTabsProvider.onItemTapped(1);
-                  // print('dataTimeToday= ${_myNavigationKey.currentState?.dataTimeToday()}');
+                  context.read<MainTabsProvider>().currentMeelString = meelTime;
+                  final navigator = Navigator.of(context);
+                  navigator.pushReplacementNamed('/recipes_list_page_widget');
+                  print('meelTime= $meelTime');
                 },
                 child:
                 Icon(Icons.add, size: 20),
@@ -425,20 +442,55 @@ class _imageChoiceWidgetState extends State<imageChoiceWidget> {
       return
         Padding(
           padding: EdgeInsets.all(8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            child: SizedBox(
-                height: 96,
-                width: 96,
-                child:
-                  Image(
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                child: SizedBox(
                     height: 96,
                     width: 96,
-                    fit:BoxFit.fill,
-                    image: AssetImage(mealTimeRecipiesList[0].imageName[0]),
+                    child:
+                      Image(
+                        height: 96,
+                        width: 96,
+                        fit:BoxFit.fill,
+                        image: AssetImage(mealTimeRecipiesList[0].imageName[0]),
+                      ),
+                ),
+              ),
+              SizedBox(
+                // height: 96,
+                width: 96,
+                child: ElevatedButton(                                                   //Button to add recipes
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        AppColors.foregroundLightGreen),
+                    foregroundColor: MaterialStateProperty.all(
+                        AppColors.mainGreenMoreDark),
+                    // side: MaterialStateProperty.all(BorderSide(
+                    //   color: Colors.red,
+                    //   style: BorderStyle.solid,//color
+                    // ),),
+                    textStyle: MaterialStateProperty.all(
+                      const TextStyle(fontSize: 20,
+                        fontWeight: FontWeight.w500, /*letterSpacing: -0.6,*/),
+                    ),
+                    // padding: MaterialStateProperty.all(EdgeInsets.only(left: 2)),
+                    alignment: Alignment.center,
                   ),
-            ),
-        ),
+                  onPressed: (){
+                    context.read<MainTabsProvider>().currentMeelString = meelTime;
+                    final navigator = Navigator.of(context);
+                    navigator.pushReplacementNamed('/recipes_list_page_widget');
+                    print('meelTime= $meelTime');
+                  },
+                  child:
+                  Icon(Icons.add, size: 20),
+                  /*textAlign: TextAlign.center,*/
+                ),
+              ),
+            ],
+          ),
       );
     }
   }

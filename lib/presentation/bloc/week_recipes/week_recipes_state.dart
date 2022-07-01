@@ -1,5 +1,7 @@
+import 'package:week_menu/provider/main_tabs_provider.dart';
+
 import '../../../main.dart';
-import '../../../widgets/recipe_list/recipe_list_widget.dart';
+import '../../../widgets/recipes_list/recipes_list_widget.dart';
 
 // class DayRecipes{
 //   Map <String, List<Recipe>> dayRecipes = {
@@ -27,5 +29,5 @@ class WeekRecipesLoadingState extends WeekRecipesState{}
 
 class WeekRecipesLoadedState extends WeekRecipesState{
   WeekRecipes weekRecipes;
-  WeekRecipesLoadedState({required this.weekRecipes});
+  WeekRecipesLoadedState({required this.weekRecipes, required MainTabsProvider mainTabsProvider,});
 }
