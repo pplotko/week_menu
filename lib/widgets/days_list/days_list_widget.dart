@@ -258,6 +258,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                                         child:
                                                           MealTimeMenuWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies!, dayController:currentDayIndex),
                                                       ),
+                                                      // const SizedBox(height: 8,),
                                                     ],
                                                   ),
                                                   imageChoiceWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies, recipies: recipes, meelTime: mealTime[index]),
@@ -331,8 +332,12 @@ class _MealTimeMenuWidgetState extends State<MealTimeMenuWidget> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
+// <<<<<<< HEAD
               padding: MaterialStateProperty.all(
                   const EdgeInsets.only(left: 0)),
+// =======
+//               padding: MaterialStateProperty.all(const EdgeInsets.only(left: 0)),
+// >>>>>>> cd2167f7bbcc9f7abcf0695fc35b997c0323e90c
               // alignment: Alignment.topLeft,
             ),
             onPressed: () {},
