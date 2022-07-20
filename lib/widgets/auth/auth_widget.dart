@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../Theme/app_button_style.dart';
 import '../../Theme/app_colors.dart';
+import '../app_bar/app_bar_widget.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget ({Key? key}) : super(key: key);
@@ -17,10 +18,11 @@ class _AuthWidgetState extends State<AuthWidget> {
   Widget build(BuildContext context) {
     String lString;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Loging to your account'),
-      ),
+      appBar: MyCustomAppBar(titel:'Loging to your account', isBackPath: false, path: '', ),
+      // AppBar(
+      //   centerTitle: true,
+      //   title: const Text('Loging to your account'),
+      // ),
       body: ListView(
         children: [
           const _HeaderWidget(),
@@ -121,14 +123,10 @@ class _FormWidgetState extends State<_FormWidget> {
       navigator.pushReplacementNamed('/main');
       // Navigator.pushNamed(context, '/main');
       // print('open app');
-    }
-    else {
+    } else {
       errorText = 'Wrong login or password!';
-      print(errorText);
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
   void _resetPassword() {
     print('resetPassword');
@@ -184,7 +182,6 @@ class _FormWidgetState extends State<_FormWidget> {
         ),
         const SizedBox(height: 30,),
         Row(children: [
-          // TextButton(
           ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(AppColors.mainLightGreen),
@@ -200,14 +197,8 @@ class _FormWidgetState extends State<_FormWidget> {
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 10)
               ),
             ),
-            //   TextButton.styleFrom(
-            //   primary: Colors.pink,
-            //   backgroundColor: Color(0xFF01B4E4),
-            // ),
-
             onPressed: _auth,
             child: const Text('Login',
-              // style : textStyle),
             ),
           ),
           const SizedBox(width: 25,),
@@ -220,7 +211,6 @@ class _FormWidgetState extends State<_FormWidget> {
                 ),
               ),
           ),
-
         ],)
       ],
     );

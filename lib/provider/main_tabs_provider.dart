@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:week_menu/resources/resources.dart';
-import 'package:week_menu/widgets/recipes_list/recipes_list_widget.dart';
+
+import '../widgets/recipe.dart';
 
 class MainTabsProvider extends ChangeNotifier {
   int _currentTableIndex = 0;
-  // final int _currentDayIndex = 0;
-  // final int _currentMeelIndex = 0;
   int currentDayIndex = 0;
   int currentMeelIndex = 0;
   String currentMeelString = 'Завтрак';
   int currentListIndex = 0;
-  // var _currentRecipeId = 0;
   Recipe currentRecipe = Recipe(
     id: 1,
     imageName: [AppImages.plovSoSvininoi480,],
@@ -26,8 +24,6 @@ class MainTabsProvider extends ChangeNotifier {
   // int get currentRecipeId => _currentRecipeId;
   // Recipe get currentRecipe => _currentRecipe;
   // Recipe set currentRecipe => _currentRecip;
-
-
 
   void onItemTapped(int value) {
     _currentTableIndex = value;

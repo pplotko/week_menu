@@ -7,6 +7,7 @@ import '../../Theme/app_colors.dart';
 import '../../main.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_bloc.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_state.dart';
+import '../recipe.dart';
 import 'week_days.dart';
 
 class DaysListWidget extends StatefulWidget {

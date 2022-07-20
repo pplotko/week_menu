@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/main_tabs_provider.dart';
+import '../app_bar/app_bar_widget.dart';
 import '../days_list/days_list_widget.dart';
+import '../recipe.dart';
 import '../recipes_list/recipes_list_widget.dart';
 import '../settings_widget/settings_widget.dart';
 
@@ -46,10 +48,11 @@ class MainScreenWidgetState extends State<MainScreenWidget> {
           print("mainTabsProvider = $mainTabsProvider");
           return
             Scaffold(
-              appBar: AppBar(
-                centerTitle: true,
-                title: Text('WeekMenu     Today: $dataToday'),
-              ),
+              appBar: MyCustomAppBar(titel: dataToday, isBackPath: false, path: '/main',),
+                // AppBar(
+                //   centerTitle: true,
+                //   title: Text('WeekMenu     Today: $dataToday'),
+                // ),
               body:
                   SizedBox(
                     width: double.infinity,

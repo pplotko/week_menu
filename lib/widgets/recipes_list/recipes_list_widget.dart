@@ -5,86 +5,8 @@ import 'package:week_menu/provider/main_tabs_provider.dart';
 import '../../Theme/app_colors.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_bloc.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_event.dart';
+import '../recipe.dart';
 import '../recipe_detail_screen/recipe_detail_widget.dart';
-
-class Recipe {
-  final int id;
-  final List <String> imageName;
-  final String title;
-  final String time;
-  final String description;
-  final String imgFirstName;
-
-  Recipe({
-    required this.id,
-    required this.imageName,
-    required this.title,
-    required this.time,
-    required this.description,
-    required this.imgFirstName,
-  });
-  @override
-  String toString() {
-    // TODO: implement toString
-    // String recipeDescription = "$title";
-    return title;
-  }
-}
-// создаем список рецептов
-// final указывает на то, что мы больше
-// никогда не сможем присвоить имени _recipe
-// другой список рецептов
-// final recipes = [
-//   Recipe(
-//     id: 0,
-//     imageName: [AppImages.kotletiKlassicheskie2480300x233,AppImages.plovSoSvininoi480,],
-//     title: 'КОТЛЕТЫ КЛАССИЧЕСКИЕ (СВИНИНА + КУРИЦА)',
-//     time: 'December 17, 2021',
-//     description: 'Готовим фарш, перекручиваем мясо (свинину и курицу) на тонкой сетке мясорубки 2 раза. Лук сразу мелко мелко шинкуем. Обжариваем (если планируем заморозку). Добавляем в фарш. Хлебный мякиш отправляем в кипяток размочиться. Выдавливаем чеснок, солим и перчим по вкусу. Добавляем в мясо хлеб, пропустив через мясорубку и тщательно все перемешиваем. Сейчас руками сформируем мясные шарики и немного приплюснем. Руки при этом мочим в холодной воде, чтобы фарш не прилипал к ним. Теперь обваляем котлеты в муке или можно использовать любую другую панировку. Сначала одну сторону обжариваем на среднем огне, потом убавляем огонь до маленького, переворачиваем котлетки и накрываем крышкой. Добавляем к котлетам воды и тушим. После доводим до готовности и готово. Котлетки готовы. Приятного аппетита!',
-//     imgFirstName: AppImages.kotletiKlassicheskie2480300x233,
-//   ),
-//   Recipe(
-//     id: 1,
-//     imageName: [AppImages.plovSoSvininoi480,],
-//     title: 'ПЛОВ СО СВИНИНОЙ',
-//     time: 'December 17, 2021',
-//     description: 'Помыть и порезать на куски свинину. В сковороду (или казан) налить масло подсолнечное. Раскалить. Нарезать лук и обжарить его в масле. Свинину посолить, поперчить, положить в масло. Обжарить на большом огне. Убавить огонь почти до минимума и тушить 10 минут. Пока готовится свинина поставьте овощной бульон. Налить воду в кастрюлю и поставить на огонь. Лук и морковь хорошо промыть (чистить от кожуры не нужно!!!, т.е. лук должен быть в кожуре). Разрезать лук, морковь и стебель сельдерея напополам и положите разрезанными сторонами на сковородку без масла. Обжарить 2-3 минуты и закинуть в бульон. Как закипит вода, убавить огонь и варить бульон на слабом огне. Бульон будет вариться на протяжении всего времени приготовления блюда, т.к. периодически нужно будет подливать бульон в рис до его полной готовности. Потереть морковь на крупной терке. Выложить сверху мяса ровным слоем и тушить еще 10 минут. Рис промыть. Добавить в него 1 чайную ложку специй для плова и 1 чайную ложку соли, перемешать. Открыть крышку и положить 2 головки чеснока не чищенные (предварительно помыв их). Сверху насыпать рис ровным слоем. Аккуратно залить рис овощным бульоном, так, чтобы вода поднялась над рисом на 5-7 мм. Накрыть сверху крышкой. Тушить 30 минут. Если видите, что бульон выкипел, а рис еще не готов, добавите еще немного бульона. Откройте крышку и аккуратно переверните рис. Выключите огонь. Дайте настояться плову еще некоторое время. Плов готов. Приятного аппетита!',
-//     imgFirstName: AppImages.plovSoSvininoi480,
-//   ),
-//   Recipe(
-//     id: 2,
-//     imageName: [AppImages.otbivnaya,],
-//     title: 'ОТБИВНАЯ ИЗ СВИНИНЫ',
-//     time: 'December 17, 2021',
-//     description: 'Порезать на куски вырезку из свинины или филе, отбить. Обмакнуть во всбитом яйце с солью и специями, а затем в муке. Жарить на сковороде с двух сторон до хрустящей корочки.',
-//     imgFirstName: AppImages.otbivnaya,
-//   ),
-//   Recipe(
-//     id: 3,
-//     imageName: [AppImages.kotletiKlassicheskie2480300x233,],
-//     title: 'КОТЛЕТЫ КЛАССИЧЕСКИЕ (СВИНИНА + КУРИЦА)',
-//     time: 'December 17, 2021',
-//     description: 'Готовим фарш, перекручиваем мясо (свинину и курицу) на тонкой сетке мясорубки 2 раза. Лук сразу мелко мелко шинкуем. Обжариваем (если планируем заморозку). Добавляем в фарш. Хлебный мякиш отправляем в кипяток размочиться. Выдавливаем чеснок, солим и перчим по вкусу. Добавляем в мясо хлеб, пропустив через мясорубку и тщательно все перемешиваем. Сейчас руками сформируем мясные шарики и немного приплюснем. Руки при этом мочим в холодной воде, чтобы фарш не прилипал к ним. Теперь обваляем котлеты в муке или можно использовать любую другую панировку. Сначала одну сторону обжариваем на среднем огне, потом убавляем огонь до маленького, переворачиваем котлетки и накрываем крышкой. Добавляем к котлетам воды и тушим. После доводим до готовности и готово. Котлетки готовы. Приятного аппетита!',
-//     imgFirstName: AppImages.kotletiKlassicheskie2480300x233,
-//   ),
-//   Recipe(
-//     id: 4,
-//     imageName: [AppImages.kotletiKlassicheskie2480300x233,],
-//     title: 'КОТЛЕТЫ КЛАССИЧЕСКИЕ (СВИНИНА + КУРИЦА)',
-//     time: 'December 17, 2021',
-//     description: 'Готовим фарш, перекручиваем мясо (свинину и курицу) на тонкой сетке мясорубки 2 раза. Лук сразу мелко мелко шинкуем. Обжариваем (если планируем заморозку). Добавляем в фарш. Хлебный мякиш отправляем в кипяток размочиться. Выдавливаем чеснок, солим и перчим по вкусу. Добавляем в мясо хлеб, пропустив через мясорубку и тщательно все перемешиваем. Сейчас руками сформируем мясные шарики и немного приплюснем. Руки при этом мочим в холодной воде, чтобы фарш не прилипал к ним. Теперь обваляем котлеты в муке или можно использовать любую другую панировку. Сначала одну сторону обжариваем на среднем огне, потом убавляем огонь до маленького, переворачиваем котлетки и накрываем крышкой. Добавляем к котлетам воды и тушим. После доводим до готовности и готово. Котлетки готовы. Приятного аппетита!',
-//     imgFirstName: AppImages.kotletiKlassicheskie2480300x233,
-//   ),
-//   Recipe(
-//     id: 5,
-//     imageName: [AppImages.kotletiKlassicheskie2480300x233,],
-//     title: 'КОТЛЕТЫ КЛАССИЧЕСКИЕ (СВИНИНА + КУРИЦА)',
-//     time: 'December 17, 2021',
-//     description: 'Готовим фарш, перекручиваем мясо (свинину и курицу) на тонкой сетке мясорубки 2 раза. Лук сразу мелко мелко шинкуем. Обжариваем (если планируем заморозку). Добавляем в фарш. Хлебный мякиш отправляем в кипяток размочиться. Выдавливаем чеснок, солим и перчим по вкусу. Добавляем в мясо хлеб, пропустив через мясорубку и тщательно все перемешиваем. Сейчас руками сформируем мясные шарики и немного приплюснем. Руки при этом мочим в холодной воде, чтобы фарш не прилипал к ним. Теперь обваляем котлеты в муке или можно использовать любую другую панировку. Сначала одну сторону обжариваем на среднем огне, потом убавляем огонь до маленького, переворачиваем котлетки и накрываем крышкой. Добавляем к котлетам воды и тушим. После доводим до готовности и готово. Котлетки готовы. Приятного аппетита!',
-//     imgFirstName: AppImages.kotletiKlassicheskie2480300x233,
-//   ),
-// ];
-
 
 class RecipesListWidget extends StatefulWidget {
   List<Recipe> recipes;
@@ -158,23 +80,20 @@ class _RecipesListWidgetState extends State<RecipesListWidget> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     child: Row(
                         children: [
-                          Image(image: AssetImage(recipe.imageName[0]/*recipe.imgFirstName*/)),
+                          Image(image: AssetImage(recipe.imageName[0]/*recipe.imgFirstName height: , width: ,*/), ),
                           const SizedBox(width: 15),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // const SizedBox(height: 5),
-                                // IconButton(
-                                //     icon: Icon(Icons.add),
-                                //     onPressed: () {
-                                //       print("Pressed IconButton");
-                                //     }),
                                 const SizedBox(height: 20),
-                                Text(recipe.title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Text(recipe.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold,),
+                                  ),
                                 ),
                                 const SizedBox(height: 5),
                                 Text(recipe.time,
@@ -210,16 +129,38 @@ class _RecipesListWidgetState extends State<RecipesListWidget> {
                   ),
                   Align(
                     alignment: Alignment.topRight,
-                    child: IconButton(                  // AddRecipe
-                        icon: const Icon(Icons.add),
-                        color:AppColors.mainGreenMoreDark,
-                        // padding: const EdgeInsets.all(2.0),
-                        onPressed: () {
-                          print("Pressed IconButton");
-                          mainTabsProvider.currentRecipe = recipe;
-                          weekRecipesBloc.add(WeekRecipesAddRecipeEvent());               //!!!!!!!!!!!!!!!!!!!!!!!!!!
-                          Navigator.of(context).pushReplacementNamed('/main');
-                        }
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:5, right: 5),
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: Container(
+                          // decoration: BoxDecoration(
+                          //   color: Colors.white,
+                          //   border: Border.all(color: AppColors.mainGreenDark),
+                          //   borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          //   boxShadow:[
+                          //     BoxShadow(
+                          //       color: Colors.black.withOpacity(0.1),
+                          //       blurRadius: 8,
+                          //       offset: const Offset(0,4),
+                          //     ),
+                          //   ],
+                          // ),
+                          child: IconButton(                  // AddRecipe
+                            iconSize: 18,
+                            icon: const Icon(Icons.add),
+                            color:AppColors.mainGreenMoreDark,
+                            padding: const EdgeInsets.only(right: 1, bottom: 1),
+                            onPressed: () {
+                              print("Pressed IconButton");
+                              mainTabsProvider.currentRecipe = recipe;
+                              weekRecipesBloc.add(WeekRecipesAddRecipeEvent());               //!!!!!!!!!!!!!!!!!!!!!!!!!!
+                              Navigator.of(context).pushReplacementNamed('/main');
+                            }
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -256,31 +197,3 @@ class _RecipesListWidgetState extends State<RecipesListWidget> {
     );
   }
 }
-
-
-
-
-// class DayRecipes{
-//   Map <String, List<Recipe>> dayRecipes = {
-//     'Завтрак': [],
-//     'Обед': [],
-//     'Ужин': []
-//   };
-// }
-// class WeekRecipes {
-//   List<DayRecipes> weekRecipes = [];
-// }
-/* примерное описание стейтов
-abstract class WeekRecipesState {}
-
-class WeekRecipesEmptyState extends WeekRecipesState{}
-
-class WeekRecipesLoadingState extends WeekRecipesState{}
-
-class WeekRecipesLoadedState extends WeekRecipesState{
-  WeekRecipes weekRecipes;
-  WeekRecipesLoadedState({required this.weekRecipes});
-}
-
-class WeekRecipesErrorState extends WeekRecipesState{}
-*/

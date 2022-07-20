@@ -1,16 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_menu/provider/main_tabs_provider.dart';
 import '../../../main.dart';
-import '../../../resources/resources.dart';
-import '../../../widgets/recipes_list/recipes_list_widget.dart';
+import '../../../widgets/recipe.dart';
 import 'week_recipes_event.dart';
 import 'week_recipes_state.dart';
 
 class WeekRecipesBloc extends Bloc <WeekRecipesEvent, WeekRecipesState> {
   final WeekRecipes _weekRecipes;
   MainTabsProvider mainTabsProvider;
-  // Recipe _currentRecipe;
-  // final mainTabsProvider = context.watch<MainTabsProvider>();
 
   WeekRecipesBloc(this._weekRecipes, this.mainTabsProvider, ) : super(WeekRecipesLoadedState(weekRecipes: _weekRecipes,
       mainTabsProvider: mainTabsProvider,
@@ -24,16 +21,6 @@ class WeekRecipesBloc extends Bloc <WeekRecipesEvent, WeekRecipesState> {
     on <WeekRecipesAddRecipeEvent>((event, emit) {
       print('emit(WeekRecipesAddRecipeState');
       Recipe value = mainTabsProvider.currentRecipe;
-      // String meel = 'Завтрак';
-      // if (mainTabsProvider.currentMeelIndex ==1)  { meel = 'Обед';
-      // } else {
-      //   if (mainTabsProvider.currentMeelIndex == 2) {
-      //     meel = 'Ужин';
-      //   }
-      //   // else {
-      //   //   meel = 3;
-      //   // }
-      // }
       _weekRecipes.weekRecipes[mainTabsProvider.currentDayIndex].dayRecipes[mainTabsProvider.currentMeelString]!.add(value);
       // for(var item in _weekRecipes.weekRecipes[dayController].dayRecipes.entries){
         //   // item представляет MapEntry<K, V>
@@ -46,9 +33,18 @@ class WeekRecipesBloc extends Bloc <WeekRecipesEvent, WeekRecipesState> {
     on <WeekRecipesDelRecipeEvent>((event, emit) {
       print('emit(WeekRecipesDelRecipeState');
       print('mainTabsProvider.currentListIndex = ${mainTabsProvider.currentListIndex}');
+      print('mainTabsProvider.currentMeelString = ${mainTabsProvider.currentMeelString}');
       _weekRecipes.weekRecipes[mainTabsProvider.currentDayIndex].
-        dayRecipes[mainTabsProvider.currentMeelString]!.
-          removeAt(mainTabsProvider.currentListIndex);
+          dayRecipes[mainTabsProvider.currentMeelString]!.
+            removeAt(mainTabsProvider.currentListIndex);
+      // if (mainTabsProvider.currentListIndex != 0) {
+      //   _weekRecipes.weekRecipes[mainTabsProvider.currentDayIndex].
+      //     dayRecipes[mainTabsProvider.currentMeelString]!.
+      //   removeAt(mainTabsProvider.currentListIndex);
+      // } else {
+      //   _weekRecipes.weekRecipes[mainTabsProvider.currentDayIndex].
+      //     dayRecipes[mainTabsProvider.currentMeelString]!.clear();
+      // }
       emit(WeekRecipesLoadedState(weekRecipes: _weekRecipes, mainTabsProvider: mainTabsProvider,));
     });
 

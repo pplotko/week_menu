@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_menu/resources/resources.dart';
-import 'package:week_menu/widgets/recipes_list/recipes_list_widget.dart';
 
 import '../../Theme/app_colors.dart';
-import '../../main.dart';
+import '../../Theme/app_colors.dart';
+import '../../Theme/app_colors.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_bloc.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_event.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_state.dart';
 import '../../provider/main_tabs_provider.dart';
 import '../main_screen/main_screen_widget.dart';
-import 'week_days.dart';
+import '../recipe.dart';
+
 // GlobalKey<MainScreenWidgetState> _myNavigationKey = GlobalKey();
 GlobalKey<MainScreenWidgetState> _myNavigationKey = GlobalKey<MainScreenWidgetState>();
 class DaysListWidget extends StatefulWidget {
@@ -27,10 +28,8 @@ class _DaysListWidgetState extends State<DaysListWidget> {
   var dayListState = List.filled(7, 0);
   List<String> daysNames= ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
   List<String> mealTime= ['Завтрак', 'Обед', 'Ужин', 'Добавить приём пищи'];
-  // int dayController=0;
   List<Recipe> recipes;
   _DaysListWidgetState(this.recipes);
-
 
   @override
   void initState() {
@@ -49,6 +48,9 @@ class _DaysListWidgetState extends State<DaysListWidget> {
             return const Center(child: CircularProgressIndicator(),);
            }
           if (state is WeekRecipesLoadedState) {
+            // double radiusController = 5;
+            double radiusController = context.read<MainTabsProvider>().currentDayIndex == 0 ? 0 : 5;
+
             return
               Container(
                 decoration: const BoxDecoration(
@@ -66,7 +68,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 16, 0, 8),
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height-184,
+                        height: MediaQuery.of(context).size.height-192,
                         width: 56,
                         child: ListView.builder(
                             itemCount: 7,
@@ -87,6 +89,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                         bottomLeft: Radius.circular(5),
                                         bottomRight: Radius.circular(0),
                                       ),
+                                      // color: AppColors.foregroundLightGreen,
                                       color: Colors.white,
                                     ),
                                     child: SizedBox(
@@ -96,7 +99,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                         padding: const EdgeInsets.only(left: 10, top: 12),
                                         decoration: const BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(24),),
-                                          color: AppColors.mainLightGreen,
+                                          color: Colors.white,
                                         ),
                                         child: Text(daysNames[index],
                                           style: const TextStyle(
@@ -124,13 +127,11 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                               AppColors.mainGreenMoreDark),
                                           textStyle: MaterialStateProperty.all(
                                             const TextStyle(fontSize: 20,
-                                              fontWeight: FontWeight.w500, /*letterSpacing: -0.6,*/),
-                                          ),
+                                              fontWeight: FontWeight.w500, /*letterSpacing: -0.6,*/),),
                                           padding: MaterialStateProperty.all(const EdgeInsets.only(left: 2)),
                                           alignment: Alignment.center,
                                         ),
                                         onPressed: () => setState(() {
-                                          // dayController = index;
                                           context.read<MainTabsProvider>().currentDayIndex = index;
                                         }),
                                         child: Text(daysNames[index],
@@ -147,14 +148,21 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border.all(color: Colors.black.withOpacity(0.2)),
-                          borderRadius: const BorderRadius.all(Radius.circular(5)),
-                          boxShadow:[
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 8,
-                              offset: const Offset(0,4),
-                            ),],),
+                          // border: Border.all(color: Colors.black.withOpacity(0.2)),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(radiusController),
+                            topRight: Radius.circular(5),
+                            bottomLeft: Radius.circular(5),
+                            bottomRight: Radius.circular(5),
+                          ),
+                          // borderRadius: const BorderRadius.all(Radius.circular(5)),
+                          // boxShadow:[
+                          //   BoxShadow(
+                          //     color: Colors.black.withOpacity(0.1),
+                          //     blurRadius: 8,
+                          //     offset: const Offset(0,4),
+                          //   ),],
+                        ),
                         child: Column(
                           children: [
                             SizedBox(
@@ -162,7 +170,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                               width: MediaQuery.of(context).size.width-88,
                             ),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height-184,
+                              height: MediaQuery.of(context).size.height-205, //184
                               width: MediaQuery.of(context).size.width-88,
                               child: ListView.builder(
                                   itemCount:                    //Тут задаю цикл по количеству приёмов пищи в этот день
@@ -256,7 +264,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                                       SizedBox(
                                                         width: MediaQuery.of(context).size.width - 248,
                                                         child:
-                                                          MealTimeMenuWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies!, dayController:currentDayIndex),
+                                                          mealTimeMenuWidget(key: UniqueKey(),mealTimeRecipiesList: listRecipies!, dayController:currentDayIndex, meelTime: mealTime[index]),
                                                       ),
                                                       // const SizedBox(height: 8,),
                                                     ],
@@ -271,6 +279,32 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                                   }
                               ),
                             ),
+                            // SizedBox(// Показать кнопку 'Добавить приём пищи' под скролом
+                            //   height: 40,
+                            //   width: MediaQuery.of(context).size.width-88,
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.all(8),
+                            //     child: SizedBox(
+                            //       height: 24,
+                            //       width: MediaQuery.of(context).size.width-80,
+                            //       child: ElevatedButton(
+                            //         style: ButtonStyle(
+                            //           backgroundColor: MaterialStateProperty.all(
+                            //           Colors.white),
+                            //           foregroundColor: MaterialStateProperty.all(
+                            //           AppColors.unselectedGrey),
+                            //           textStyle: MaterialStateProperty.all(
+                            //         const TextStyle(fontSize: 12, // fontWeight: FontWeight.w600,
+                            //         ),
+                            //       ),
+                            //       ),
+                            //       onPressed: () {},
+                            //         child: const Text('Добавить приём пищи', //mealTime[3],
+                            //         textAlign: TextAlign.center,),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -297,19 +331,22 @@ class _DaysListWidgetState extends State<DaysListWidget> {
 
 
 
-class MealTimeMenuWidget extends StatefulWidget {
+class mealTimeMenuWidget extends StatefulWidget {
   final List<Recipe> mealTimeRecipiesList;
   final int dayController;
-  const MealTimeMenuWidget({Key? key, required this.mealTimeRecipiesList, required this.dayController}) : super(key: key);
+  String meelTime;
+
+  mealTimeMenuWidget({Key? key, required this.mealTimeRecipiesList, required this.dayController, required String this.meelTime}) : super(key: key);
 
   @override
-  State<MealTimeMenuWidget> createState() => _MealTimeMenuWidgetState(this.mealTimeRecipiesList, this.dayController);
+  State<mealTimeMenuWidget> createState() => _mealTimeMenuWidgetState(this.mealTimeRecipiesList, this.dayController, this.meelTime);
 }
 
-class _MealTimeMenuWidgetState extends State<MealTimeMenuWidget> {
+class _mealTimeMenuWidgetState extends State<mealTimeMenuWidget> {
   List<Recipe> mealTimeRecipiesList;
   int dayController;
-  _MealTimeMenuWidgetState(this.mealTimeRecipiesList, this.dayController);
+  String meelTime;
+  _mealTimeMenuWidgetState(this.mealTimeRecipiesList, this.dayController, this.meelTime);
 
   @override
   Widget build(BuildContext context) {
@@ -321,7 +358,7 @@ class _MealTimeMenuWidgetState extends State<MealTimeMenuWidget> {
       for (int i = 0; i < mealTimeRecipiesList.length; i++) {
         print('Рецепт ${mealTimeRecipiesList[i].title}');
         myListWidgets.add(
-          TextButton(
+          TextButton(key: UniqueKey(),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.white),
               foregroundColor: MaterialStateProperty.all(
@@ -332,18 +369,15 @@ class _MealTimeMenuWidgetState extends State<MealTimeMenuWidget> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-// <<<<<<< HEAD
               padding: MaterialStateProperty.all(
                   const EdgeInsets.only(left: 0)),
-// =======
-//               padding: MaterialStateProperty.all(const EdgeInsets.only(left: 0)),
-// >>>>>>> cd2167f7bbcc9f7abcf0695fc35b997c0323e90c
               // alignment: Alignment.topLeft,
             ),
             onPressed: () {},
             onLongPress: () {                     ///DelRecipe
               print("Pressed TextButton");
               mainTabsProvider.currentListIndex = i;
+              mainTabsProvider.currentMeelString = meelTime;
               weekRecipesBloc.add(WeekRecipesDelRecipeEvent());
               Navigator.of(context).pushReplacementNamed('/main');
             },
@@ -412,7 +446,8 @@ class _imageChoiceWidgetState extends State<imageChoiceWidget> {
               height: 96,
               width: 96,
               child:
-              ElevatedButton(                                                   //Button to add recipes
+              ElevatedButton(
+                key: UniqueKey(),//Button to add recipes
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
                       AppColors.foregroundLightGreen),
@@ -436,7 +471,7 @@ class _imageChoiceWidgetState extends State<imageChoiceWidget> {
                   print('meelTime= $meelTime');
                 },
                 child:
-                Icon(Icons.add, size: 20),
+                const Icon(Icons.add, size: 20),
                 /*textAlign: TextAlign.center,*/
               ),
             ),
@@ -446,11 +481,11 @@ class _imageChoiceWidgetState extends State<imageChoiceWidget> {
     } else {
       return
         Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
                 child: SizedBox(
                     height: 96,
                     width: 96,
@@ -458,7 +493,7 @@ class _imageChoiceWidgetState extends State<imageChoiceWidget> {
                       Image(
                         height: 96,
                         width: 96,
-                        fit:BoxFit.fill,
+                        fit:BoxFit.fitHeight,
                         image: AssetImage(mealTimeRecipiesList[0].imageName[0]),
                       ),
                 ),
@@ -490,7 +525,7 @@ class _imageChoiceWidgetState extends State<imageChoiceWidget> {
                     print('meelTime= $meelTime');
                   },
                   child:
-                  Icon(Icons.add, size: 20),
+                  const Icon(Icons.add, size: 20),
                   /*textAlign: TextAlign.center,*/
                 ),
               ),
