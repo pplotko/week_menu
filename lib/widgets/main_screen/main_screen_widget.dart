@@ -11,85 +11,88 @@ import '../settings_widget/settings_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
   // GlobalKey<MainScreenWidgetState> myNavigationKey = GlobalKey();
-  List<Recipe> recipes;
+  final List<Recipe> recipes;
 
-  MainScreenWidget({Key? key, required this.recipes}) : super(key: key);
+  const MainScreenWidget({Key? key, required this.recipes}) : super(key: key);
 
   @override
-  MainScreenWidgetState createState() => MainScreenWidgetState(this.recipes);
+  MainScreenWidgetState createState() => MainScreenWidgetState();
 }
 
 class MainScreenWidgetState extends State<MainScreenWidget> {
   // int _selectedIndex = 0;
-  List<Recipe> recipes;
-  MainScreenWidgetState(this.recipes);
+  // final List<Recipe> recipes;
+  // MainScreenWidgetState(this.recipes);
 
-  dataTimeToday () {
+  String dataTimeToday() {
     String dataDayNow = "0";
     String dataMonthNow = "0";
-    dataDayNow = DateTime.now().day.toInt()<10? '0${DateTime.now().day}'
-        : dataDayNow = DateTime.now().day.toString(); // Это если через тернарный оператор писать
-    dataMonthNow = DateTime.now().month.toInt()<10? '0${DateTime.now().month}'
+    dataDayNow = DateTime.now().day.toInt() < 10
+        ? '0${DateTime.now().day}'
+        : dataDayNow = DateTime.now()
+            .day
+            .toString(); // Это если через тернарный оператор писать
+    dataMonthNow = DateTime.now().month.toInt() < 10
+        ? '0${DateTime.now().month}'
         : dataDayNow = DateTime.now().month.toString();
     final String dateNow = '$dataDayNow.$dataMonthNow.${DateTime.now().year}';
-    return(dateNow);
+    return (dateNow);
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Recipe> recipes = widget.recipes;
     final String dataToday = dataTimeToday();
     return
-      // ChangeNotifierProvider(
-      //   // create: (context) => MainTabsProvider(),
-      //   // child:
-        Builder (builder: (context) {
-          final selectedIndex = context.watch<MainTabsProvider>().currentTableIndex;
-          final mainTabsProvider = context.watch<MainTabsProvider>();
-          print("mainTabsProvider = $mainTabsProvider");
-          return
-            Scaffold(
-              appBar: MyCustomAppBar(titel: dataToday, isBackPath: false, path: '/main',),
-                // AppBar(
-                //   centerTitle: true,
-                //   title: Text('WeekMenu     Today: $dataToday'),
-                // ),
-              body:
-                  SizedBox(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: IndexedStack(
-                      index: selectedIndex,
-                      // sizing: StackFit.expand,
-                      children:  [
-                        DaysListWidget(recipes:recipes,),
-                        RecipesListWidget(recipes:recipes,),
-                        const SettingsWidget(),
-                    ],
-                  ),
-                ),
-                  bottomNavigationBar: BottomNavigationBar(
-
-                    items: const <BottomNavigationBarItem>[
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.calendar_today),
-                        label: 'Недельное меню',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.menu),
-                        label: 'Рецепты',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.settings),
-                        label: 'Настройки',
-                      ),
-                    ],
-                    currentIndex: selectedIndex,
-                    onTap: (int index) {print('Index = $index');
-                      mainTabsProvider.onItemTapped(index);
-                  },
-                ),
-            );
-        });
-    // );
+        // ChangeNotifierProvider(
+        //   // create: (context) => MainTabsProvider(),
+        //   // child:
+      Builder(builder: (context) {
+        final selectedIndex = context.watch<MainTabsProvider>().currentTableIndex;
+        final mainTabsProvider = context.watch<MainTabsProvider>();
+        print("mainTabsProvider = $mainTabsProvider");
+        return Scaffold(
+          appBar: MyCustomAppBar(
+          // titel: DateFormat.yMMMd().format(DateTime.now()),
+            titel: dataToday,
+            isBackPath: false,
+            path: '/main',
+          ),
+          body: SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: IndexedStack(
+              index: selectedIndex,
+              // sizing: StackFit.expand,
+              children: [
+                DaysListWidget(recipes: recipes),
+                RecipesListWidget(recipes: recipes),
+                const SettingsWidget(),
+              ],
+            ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today),
+                label: 'Недельное меню',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.menu),
+                label: 'Рецепты',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                label: 'Настройки',
+              ),
+            ],
+            currentIndex: selectedIndex,
+            onTap: (int index) {
+              print('Index = $index');
+              mainTabsProvider.onItemTapped(index);
+            },
+          ),
+        );
+      });
   }
 }

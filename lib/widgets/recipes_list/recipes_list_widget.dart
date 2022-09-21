@@ -132,13 +132,13 @@ class _RecipesListWidgetState extends State<RecipesListWidget> {
                     child: Padding(
                       padding: const EdgeInsets.only(top:5, right: 5),
                       child: SizedBox(
-                        width: 20,
-                        height: 20,
+                        width: 22,
+                        height: 22,
                         child: Container(
                           // decoration: BoxDecoration(
                           //   color: Colors.white,
                           //   border: Border.all(color: AppColors.mainGreenDark),
-                          //   borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          //   borderRadius: const BorderRadius.all(Radius.circular(11)),
                           //   boxShadow:[
                           //     BoxShadow(
                           //       color: Colors.black.withOpacity(0.1),
@@ -148,7 +148,7 @@ class _RecipesListWidgetState extends State<RecipesListWidget> {
                           //   ],
                           // ),
                           child: IconButton(                  // AddRecipe
-                            iconSize: 18,
+                            iconSize: 20,
                             icon: const Icon(Icons.add),
                             color:AppColors.mainGreenMoreDark,
                             padding: const EdgeInsets.only(right: 1, bottom: 1),

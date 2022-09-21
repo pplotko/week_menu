@@ -4,16 +4,22 @@ import 'package:week_menu/widgets/app_bar/app_bar_widget.dart';
 import '../recipe.dart';
 import '../recipes_list/recipes_list_widget.dart';
 
-
 class RecipesListPageWidget extends StatelessWidget {
-  List<Recipe> recipes;
+  final List<Recipe> recipes;
 
-  RecipesListPageWidget({Key? key, required this.recipes/*, required this.recipeId*/}) : super(key: key);
+  const RecipesListPageWidget({
+    Key? key,
+    required this.recipes,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyCustomAppBar(titel: "Выберите рецепт", isBackPath: true, path: '/main',),
+      appBar: MyCustomAppBar(
+        titel: "Выберите рецепт",
+        isBackPath: true,
+        path: '/main',
+      ),
       //   AppBar(
       //     title: const Text("Выберите рецепт"), //Choose a recipe
       //     automaticallyImplyLeading: true,
@@ -31,17 +37,21 @@ class RecipesListPageWidget extends StatelessWidget {
       //       }),
       // ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: <Color>[AppColors.mainLightGreen, AppColors.foregroundLightGreen],
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[
+                AppColors.mainLightGreen,
+                AppColors.foregroundLightGreen
+              ],
+            ),
           ),
-        ),
-        height: MediaQuery.of(context).size.height,
-        alignment: Alignment.topCenter,
-        child: RecipesListWidget(recipes: recipes,)
-      ),
+          height: MediaQuery.of(context).size.height,
+          alignment: Alignment.topCenter,
+          child: RecipesListWidget(
+            recipes: recipes,
+          )),
     );
   }
 }

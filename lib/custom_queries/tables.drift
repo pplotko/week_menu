@@ -1,0 +1,9 @@
+CREATE TABLE recipesData (
+    id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    imageName TEXT,
+    datatime TEXT,
+    description TEXT,
+    imgFirstName TEXT,
+--    category INTEGER REFERENCES categories(id)
+);
