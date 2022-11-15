@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_menu/resources/resources.dart';
+import 'package:week_menu/widgets/days_list/clip_shadow_path.dart';
+import 'package:week_menu/widgets/days_list/menu_background_my_custom_clipper.dart';
 
 import '../../Theme/app_colors.dart';
 import '../../presentation/bloc/week_recipes/week_recipes_bloc.dart';
@@ -36,7 +38,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
   Widget build(BuildContext context) {
     MainTabsProvider ctxMainTabProvider = context.watch<MainTabsProvider>();
     final currentDayIndex = ctxMainTabProvider.currentDayIndex;
-    final currentMeelIndex = ctxMainTabProvider.currentMeelIndex;
+    // final currentMeelIndex = ctxMainTabProvider.currentMeelIndex;
     return BlocBuilder<WeekRecipesBloc, WeekRecipesState>(
         builder: (BuildContext context, state) {
       if (state is WeekRecipesLoadingState) {
@@ -54,314 +56,355 @@ class _DaysListWidgetState extends State<DaysListWidget> {
               end: Alignment.bottomCenter,
               colors: <Color>[
                 AppColors.mainLightGreen,
-                AppColors.foregroundLightGreen
+                AppColors.mainLightGreen,
+                // AppColors.foregroundLightGreen
               ],
             ),
           ),
           height: MediaQuery.of(context).size.height,
           alignment: Alignment.topLeft,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 0, 8),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height - 192,
-                  width: 56,
-                  child: ListView.builder(
-                      itemCount: 7,
-                      // itemExtent: 7,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (currentDayIndex == index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Container(
-                              height: 64,
-                              width: 64,
-                              padding: const EdgeInsets.only(
-                                left: 4,
-                                right: 4,
-                                top: 8,
-                                bottom: 8,
-                              ),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(5),
-                                  topRight: Radius.circular(0),
-                                  bottomLeft: Radius.circular(5),
-                                  bottomRight: Radius.circular(0),
-                                ),
-                                // color: AppColors.foregroundLightGreen,
-                                color: Colors.white,
-                              ),
-                              child: SizedBox(
-                                height: 48,
-                                width: 48,
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.only(left: 10, top: 12),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(24),
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                  child: Text(
-                                    daysNames[index],
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w800,
-                                        color: AppColors
-                                            .mainGreenMoreDark), /*textAlign: TextAlign.center,*/
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        } else {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.only(bottom: 16, right: 8),
-                            child: SizedBox(
-                              height: 48,
-                              width: 48,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      AppColors.foregroundLightGreen),
-                                  foregroundColor: MaterialStateProperty.all(
-                                      AppColors.mainGreenMoreDark),
-                                  textStyle: MaterialStateProperty.all(
-                                    const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight
-                                          .w500, /*letterSpacing: -0.6,*/
-                                    ),
-                                  ),
-                                  padding: MaterialStateProperty.all(
-                                      const EdgeInsets.only(left: 2)),
-                                  alignment: Alignment.center,
-                                ),
-                                onPressed: () => setState(() {
-                                  ctxMainTabProvider.currentDayIndex = index;
-                                  // context.read<MainTabsProvider>().currentDayIndex = index;
-                                }),
-                                child: Text(
-                                  daysNames[
-                                      index], /*textAlign: TextAlign.center,*/
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                      }),
-                ),
-              ), //DaysNames
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0, bottom: 13.0),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    // border: Border.all(color: Colors.black.withOpacity(0.2)),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(radiusController),
-                      topRight: const Radius.circular(5),
-                      bottomLeft: const Radius.circular(5),
-                      bottomRight: const Radius.circular(5),
-                    ),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                child: ClipShadowPath(
+                  clipper: MenuBackgroundMyCustomClipper(currentDayIndex),
+                  shadow: BoxShadow(
+                    color: Colors.black.withOpacity(0.25),
+                    spreadRadius: 0,
+                    blurRadius: 4,
+                    offset: const Offset(0, 4),
                   ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 8,
-                        width: MediaQuery.of(context).size.width - 88,
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height - 205, //184
-                        width: MediaQuery.of(context).size.width - 88,
-                        child: ListView.builder(
-                            itemCount: //Тут задаю цикл по количеству приёмов пищи в этот день
-                                state.weekRecipes.weekRecipes[currentDayIndex]
-                                        .dayRecipes.length +
-                                    1,
-                            itemBuilder: (BuildContext context, int index) {
-                              // for(var item in state.weekRecipes.weekRecipes[dayController].dayRecipes.entries){
-                              //   // item представляет MapEntry<K, V>
-                              //   print("${item.key} - ${item.value}");
-                              // }
-
-                              if (index ==
-                                  state
-                                      .weekRecipes
-                                      .weekRecipes[currentDayIndex]
-                                      .dayRecipes
-                                      .length) // Показать кнопку 'Добавить приём пищи'
-                              {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: SizedBox(
-                                    height: 24,
-                                    width:
-                                        MediaQuery.of(context).size.width - 80,
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.white),
-                                        foregroundColor:
-                                            MaterialStateProperty.all(
-                                                AppColors.unselectedGrey),
-                                        textStyle: MaterialStateProperty.all(
-                                          const TextStyle(
-                                            fontSize: 12,
-                                            // fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                      onPressed: () {},
-                                      child: Text(
-                                        mealTime[index],
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                                // }
-                              } else {
-                                // Показать карточки: завтрак, обед...
-
-                                DayRecipes dayRecipes = state
-                                    .weekRecipes.weekRecipes[currentDayIndex];
-                                print(
-                                    'state.weekRecipes.weekRecipes[$currentDayIndex].= ${state.weekRecipes.weekRecipes[currentDayIndex]}');
-                                print(
-                                    'dayControllerFirst = currentDayIndex = $currentDayIndex');
-
-                                List<Recipe>? listRecipies =
-                                    dayRecipes.dayRecipes[mealTime[index]];
-                                print(
-                                    'listRecipies = ${listRecipies.toString()}');
-                                String imageNameInList;
-                                if (listRecipies == null ||
-                                    listRecipies.isEmpty) {
-                                  imageNameInList =
-                                      AppImages.kotletiKlassicheskie2480300x233;
-                                } else {
-                                  imageNameInList =
-                                      listRecipies[0].imageName[0];
-                                }
-
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                                  child: Container(
-                                    // height: 48,
-                                    width:
-                                        MediaQuery.of(context).size.width - 72,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                          color: Colors.black.withOpacity(0.2)),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(5)),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          16, 24, 8, 20),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                mealTime[index],
-                                                style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: AppColors
-                                                        .mainGreenMoreDark
-                                                    /*letterSpacing: -0.6,*/
-                                                    ),
-                                                // textAlign: TextAlign.center,
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    248,
-                                                child: MealTimeMenuWidget( // menu of dishes for each meal in the card of the day
-                                                    key: UniqueKey(),
-                                                    mealTimeRecipiesList:
-                                                        listRecipies!,
-                                                    dayController:
-                                                        currentDayIndex,
-                                                    meelTime: mealTime[index]),
-                                              ),
-                                              // const SizedBox(height: 8,),
-                                            ],
-                                          ),
-                                          ImageChoseWidget(
-                                              key: UniqueKey(),
-                                              mealTimeRecipiesList:
-                                                  listRecipies,
-                                              recipies: recipes,
-                                              meelTime: mealTime[index]),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-                            }),
-                      ),
-                      // SizedBox(// Показать кнопку 'Добавить приём пищи' под скролом
-                      //   height: 40,
-                      //   width: MediaQuery.of(context).size.width-88,
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(8),
-                      //     child: SizedBox(
-                      //       height: 24,
-                      //       width: MediaQuery.of(context).size.width-80,
-                      //       child: ElevatedButton(
-                      //         style: ButtonStyle(
-                      //           backgroundColor: MaterialStateProperty.all(
-                      //           Colors.white),
-                      //           foregroundColor: MaterialStateProperty.all(
-                      //           AppColors.unselectedGrey),
-                      //           textStyle: MaterialStateProperty.all(
-                      //         const TextStyle(fontSize: 12, // fontWeight: FontWeight.w600,
-                      //         ),
-                      //       ),
-                      //       ),
-                      //       onPressed: () {},
-                      //         child: const Text('Добавить приём пищи', //mealTime[3],
-                      //         textAlign: TextAlign.center,),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
+                  child: Container(
+                    width: MediaQuery.of(context).size.width-14,
+                    height: MediaQuery.of(context).size.height-50,
+                    // color: Colors.pink,
+                    decoration: const BoxDecoration(
+                      color: AppColors.foregroundLightGreen,
+                      // image: DecorationImage(
+                      //     image: Image.network(
+                      //         'https://flutter.su/data/4e405c78a41d983fe87757c0c7e3885b.jpg')
+                      //         .image,
+                      //     fit: BoxFit.cover),
+                    ),
                   ),
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 0, 8),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height - 192,
+                      width: 56,
+                      child: ListView.builder( //Add week days button right
+                        itemCount: 7,
+                        // itemExtent: 7,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (currentDayIndex == index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Container(
+                                height: 64,
+                                width: 64,
+                                padding: const EdgeInsets.only(
+                                  left: 4,
+                                  right: 4,
+                                  top: 8,
+                                  bottom: 8,
+                                ),
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5),
+                                    topRight: Radius.circular(0),
+                                    bottomLeft: Radius.circular(5),
+                                    bottomRight: Radius.circular(0),
+                                  ),
+                                  // color: AppColors.foregroundLightGreen,
+                                  color: Colors.transparent,
+                                ),
+                                child: SizedBox(
+                                  height: 48,
+                                  width: 48,
+                                  child: Container(
+                                    padding:
+                                        const EdgeInsets.only(left: 10, top: 12),
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(24),
+                                      ),
+                                      color: Colors.transparent,
+                                    ),
+                                    child: Text(
+                                      daysNames[index],
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w800,
+                                          color:
+                                          // AppColors.foregroundLightGreen,
+                                          AppColors.mainGreenMoreDark,
+                                      ), /*textAlign: TextAlign.center,*/
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Padding(
+                              padding:const EdgeInsets.only(bottom: 16, right: 8),
+                              child: SizedBox(
+                                height: 48,
+                                width: 48,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(0),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        AppColors.mainLightGreen),
+                                    foregroundColor: MaterialStateProperty.all(
+                                        AppColors.foregroundLightGreen),
+                                    shadowColor: MaterialStateProperty.all(
+                                        Colors.transparent),
+                                    overlayColor: MaterialStateProperty.all(
+                                        Colors.transparent),
+                                    // surfaceTintColor: MaterialStateProperty.all(
+                                    //     Colors.transparent),
+                                    textStyle: MaterialStateProperty.all(
+                                      const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        // color: AppColors.foregroundLightGreen,
+                                        // backgroundColor: Colors.transparent,
+                                      ),
+                                    ),
+                                    padding: MaterialStateProperty.all(
+                                        const EdgeInsets.only(left: 2)),
+                                    alignment: Alignment.center,
+                                  ),
+                                  onPressed: () => setState(() {
+                                    ctxMainTabProvider.currentDayIndex = index;
+                                    // context.read<MainTabsProvider>().currentDayIndex = index;
+                                  }),
+                                  child: Text(daysNames[index],
+                                      // style: const TextStyle(
+                                      //   fontSize: 20,
+                                      //   fontWeight: FontWeight.w500,
+                                      //   color: AppColors.foregroundLightGreen,
+                                      //   backgroundColor: Colors.transparent,
+                                      // ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        }),
+                  ),
+                ), //DaysNames
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0, bottom: 13.0),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      // border: Border.all(color: Colors.black.withOpacity(0.2)),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(radiusController),
+                        topRight: const Radius.circular(5),
+                        bottomLeft: const Radius.circular(5),
+                        bottomRight: const Radius.circular(5),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 8,
+                          width: MediaQuery.of(context).size.width - 88,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height - 205, //184
+                          width: MediaQuery.of(context).size.width - 88,
+                          child: ListView.builder(
+                              itemCount: //Тут задаю цикл по количеству приёмов пищи в этот день
+                                  state.weekRecipes.weekRecipes[currentDayIndex]
+                                          .dayRecipes.length +
+                                      1,
+                              itemBuilder: (BuildContext context, int index) {
+                                // for(var item in state.weekRecipes.weekRecipes[dayController].dayRecipes.entries){
+                                //   // item представляет MapEntry<K, V>
+                                //   print("${item.key} - ${item.value}");
+                                // }
+
+                                if (index ==
+                                    state
+                                        .weekRecipes
+                                        .weekRecipes[currentDayIndex]
+                                        .dayRecipes
+                                        .length) // Показать кнопку 'Добавить приём пищи'
+                                {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: SizedBox(
+                                      height: 24,
+                                      width:
+                                          MediaQuery.of(context).size.width - 80,
+                                      child: ElevatedButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.white),
+                                          foregroundColor:
+                                              MaterialStateProperty.all(
+                                                  AppColors.unselectedGrey),
+                                          textStyle: MaterialStateProperty.all(
+                                            const TextStyle(
+                                              fontSize: 12,
+                                              // fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () {},
+                                        child: Text(
+                                          mealTime[index],
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                  // }
+                                } else {
+                                  // Показать карточки: завтрак, обед...
+
+                                  DayRecipes dayRecipes = state
+                                      .weekRecipes.weekRecipes[currentDayIndex];
+                                  print(
+                                      'state.weekRecipes.weekRecipes[$currentDayIndex].= ${state.weekRecipes.weekRecipes[currentDayIndex]}');
+                                  print(
+                                      'dayControllerFirst = currentDayIndex = $currentDayIndex');
+
+                                  List<Recipe>? listRecipes =
+                                      dayRecipes.dayRecipes[mealTime[index]];
+                                  print(
+                                      'listRecipes = ${listRecipes.toString()}');
+                                  String imageNameInList;
+                                  if (listRecipes == null ||
+                                      listRecipes.isEmpty) {
+                                    imageNameInList =
+                                        AppImages.kotletiKlassicheskie2480300x233;
+                                  } else {
+                                    imageNameInList =
+                                        listRecipes[0].imageName[0];
+                                  }
+
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                                    child: Container(
+                                      // height: 48,
+                                      width:
+                                          MediaQuery.of(context).size.width - 72,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color: Colors.black.withOpacity(0.2)),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(5)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            16, 24, 8, 20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  mealTime[index],
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: AppColors
+                                                          .mainGreenMoreDark
+                                                      /*letterSpacing: -0.6,*/
+                                                      ),
+                                                  // textAlign: TextAlign.center,
+                                                ),
+                                                const SizedBox(height: 8),
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width -
+                                                      248,
+                                                  child: MealTimeMenuWidget( // menu of dishes for each meal in the card of the day
+                                                      key: UniqueKey(),
+                                                      mealTimeRecipiesList:
+                                                          listRecipes!,
+                                                      dayController:
+                                                          currentDayIndex,
+                                                      meelTime: mealTime[index]),
+                                                ),
+                                                // const SizedBox(height: 8,),
+                                              ],
+                                            ),
+                                            ImageChoseWidget(
+                                              key: UniqueKey(),
+                                              mealTimeRecipesList: listRecipes,
+                                              recipes: recipes,
+                                              meelTime: mealTime[index],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }),
+                        ),
+                        // SizedBox(// Показать кнопку 'Добавить приём пищи' под скролом
+                        //   height: 40,
+                        //   width: MediaQuery.of(context).size.width-88,
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(8),
+                        //     child: SizedBox(
+                        //       height: 24,
+                        //       width: MediaQuery.of(context).size.width-80,
+                        //       child: ElevatedButton(
+                        //         style: ButtonStyle(
+                        //           backgroundColor: MaterialStateProperty.all(
+                        //           Colors.white),
+                        //           foregroundColor: MaterialStateProperty.all(
+                        //           AppColors.unselectedGrey),
+                        //           textStyle: MaterialStateProperty.all(
+                        //         const TextStyle(fontSize: 12, // fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       ),
+                        //       onPressed: () {},
+                        //         child: const Text('Добавить приём пищи', //mealTime[3],
+                        //         textAlign: TextAlign.center,),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
             ],
           ),
         );

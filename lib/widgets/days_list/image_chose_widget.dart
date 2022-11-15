@@ -6,37 +6,37 @@ import '../../provider/main_tabs_provider.dart';
 import '../recipe.dart';
 
 class ImageChoseWidget extends StatefulWidget {
-  final List<Recipe> mealTimeRecipiesList;
-  final List<Recipe> recipies;
+  final List<Recipe> mealTimeRecipesList;
+  final List<Recipe> recipes;
   final String meelTime;
 
   const ImageChoseWidget(
       {Key? key,
-      required this.mealTimeRecipiesList,
-      required this.recipies,
-      required String this.meelTime})
+      required this.mealTimeRecipesList,
+      required this.recipes,
+      required this.meelTime})
       : super(key: key);
 
   @override
   State<ImageChoseWidget> createState() => _ImageChoseWidgetState(
-      this.mealTimeRecipiesList, this.recipies, this.meelTime);
+      mealTimeRecipesList, recipes, meelTime);
 }
 
 class _ImageChoseWidgetState extends State<ImageChoseWidget> {
-  final List<Recipe> mealTimeRecipiesList;
-  final List<Recipe> recipies;
+  final List<Recipe> mealTimeRecipesList;
+  final List<Recipe> recipes;
   final String meelTime;
 
   _ImageChoseWidgetState(
-    this.mealTimeRecipiesList,
-    this.recipies,
+    this.mealTimeRecipesList,
+    this.recipes,
     this.meelTime,
   );
 
   @override
   Widget build(BuildContext context) {
     // final mainTabsProvider = context.read<MainTabsProvider>();
-    if (mealTimeRecipiesList.isEmpty) {
+    if (mealTimeRecipesList.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: ClipRRect(
@@ -90,7 +90,7 @@ class _ImageChoseWidgetState extends State<ImageChoseWidget> {
                   height: 96,
                   width: 96,
                   fit: BoxFit.fitHeight,
-                  image: AssetImage(mealTimeRecipiesList[0].imageName[0]),
+                  image: AssetImage(mealTimeRecipesList[0].imageName[0]),
                 ),
               ),
             ),
